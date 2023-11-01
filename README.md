@@ -115,6 +115,8 @@ where `<sg>` shoudl be replaced by the known space group, such as `space_group=P
 
 After running multiplex, carefully inspect the html reports. 
 
+If all is well, use the mtz files in the multiplex folder to solve the structure.
+
 ## General advice
 
 It may be necessary to go back to earlier steps in data processing (for instance, imposing space group during indexing). To avoid cluttering your directory, I recommend making new directories every time you change something. 
