@@ -1,6 +1,10 @@
 # ssx-dials
 How to process serial oscillation crystallography from CHESS data using DIALS
 
+## Getting started
+
+First, you'll need DIALS. See: <https://dials.github.io/installation.html>
+
 If you are processing data on a MacCHESS computer or CLASSE compute farm node, you can activate dials as follows:
 ```
 source /nfs/chess/sw/macchess/dials/dials-current/dials_env.sh 
