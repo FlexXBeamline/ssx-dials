@@ -46,13 +46,11 @@ If needed, there are options for the minimum and maximum number of spots per ima
 
 We can do a first-pass indexing run in P1 to see what unit cells we get. Alternatively, if you know the cell and space group, you can skip ahead. 
 
-The options `detector.fix=distance` and `joint=False` are important for serial data. We'll refine the distance later. 
-
-In the version of DIALS I'm using (3.14.2), dials.index does not automatically run in parallel. You can force it by setting the number of processors to use (`nproc=32` in my case).
-
 ```
 dials.index hits.expt hits.refl detector.fix=distance joint=False nproc=32
 ```
+
+The options `detector.fix=distance` and `joint=False` are important for serial data. We'll refine the distance later.  In the version of DIALS I'm using (3.14.2), dials.index does not automatically run in parallel. You can force it by setting the number of processors to use (`nproc=32` in my case).
 
 Next, inspect the unit cells
 
@@ -68,13 +66,13 @@ dials.index hits.expt hits.refl detector.fix=distance joint=False nproc=32 unit_
 
 (where items in brackets are replaced by correct values, for example `unit_cell=73,30.2,75.5,90,90,120`)
 
-This should index things consistently.
+Check that it indexed consistently.
 
 ```
 dials.show indexed.expt | grep "Unit cell"
 ```
 
-Now, refine the geometry
+Finally, refine the geometry.
 
 ```
 dials.refine indexed.expt indexed.refl
