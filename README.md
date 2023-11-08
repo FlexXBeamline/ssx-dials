@@ -60,7 +60,7 @@ dials.show indexed.expt | grep "Unit cell"
 Now, re-run indexing with a consensus unit cell (and space group, if known)
 
 ```
-dials.index hits.expt hits.refl detector.fix=distance joint=False nproc=32 unit_cell=<a,b,c,alpha,beta,gamma>
+dials.index hits.{expt,refl} detector.fix=distance joint=False nproc=32 unit_cell=<a,b,c,alpha,beta,gamma>
 ```
 
 (where items in brackets are replaced by correct values, for example `unit_cell=73,30.2,75.5,90,90,120`)
@@ -73,18 +73,18 @@ dials.show indexed.expt | grep "Unit cell"
 
 Now, we can run the hit-finder again to reject any experiments that did not index (important for integration, later).
 ```
-dials.python find_hits.py indexed.expt indexed.refl minspots=50
+dials.python find_hits.py indexed.{expt,refl} minspots=50 output.experiments=hits2.expt output.reflections=hits2.refl
 ```
 
 Next, we need to set a common beam / detector / goniometer model for all the datasets. You'll need to download the python file `combine.py` in this repository.
 ```
-dials.python combine.py indexed.expt model=0
+dials.python combine.py hits2.expt model=0
 ```
 The `model` argument is which experiment to use as the reference geometry. The default value is 0, which should be fine in most cases.
 
 Finally, refine the geometry.
 ```
-dials.refine combined.expt hits.refl
+dials.refine combined.expt hits2.refl
 ```
 
 ## Integration
