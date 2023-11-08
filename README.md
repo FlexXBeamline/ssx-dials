@@ -12,18 +12,17 @@ source /nfs/chess/sw/macchess/dials/dials-current/dials_env.sh
 
 ## Importing
 
-Serial crystallography data at id7b2 is collected using small oscillations per crystal, typically 1-5 degrees. The detector images from all of these sweeps are collected in a single h5 file (_master.h5) which includes metadata for the scan. However, we do not currently store the motor positions, so a conventional processing program would interpret this file as a single sweep of continuous rotation data. This adds an extra processing step in dials.
+Serial crystallography data at id7b2 is collected using small oscillations per crystal, typically 1-5 degrees. The detector images from all of these sweeps are collected in a single h5 file (_master.h5) which includes metadata for the scan. However, we do not currently store the motor positions, so a conventional processing program would interpret this file as a single sweep of continuous rotation data. We provide the program `import_sliced.py` to replace the `dials.import` step you would normally perform.
 
 ```
-dials.import <path-to-master.h5> invert_rotation_axis=True
-dials.slice_sequence imported.expt output.experiments_filename=imported.expt block_size=<total-angle>
+dials.python import_sliced.py <path-to-master.h5> invert_rotation_axis=True nimages=<number>
 ```
 
-The items in brackets should be replaced with correct values. IMPORTANT! set the block size to the total angular rotation per crystal. For example, for 5 frames of 0.25 degrees each, set `block_size=1.25`.
+The parameter `nimages` is the number of images per oscillation. If needed you can pass other options as you normally would to `dials.import`.
 
 ## Spotfinding
 
-For spotfinding, just the normal DIALS workflow.
+For spotfinding, just follow the normal DIALS workflow.
 
 ```
 dials.find_spots imported.expt
@@ -37,10 +36,10 @@ dials.spot_counts_per_image imported.expt strong.refl plot=counts_per_image.png
 
 Next, select out the 'hits'.  You'll need to download the python file `hitfinder.py` in this repository.
 ```
-dials.python hitfinder.py imported.expt strong.refl
+dials.python find_hits.py imported.expt strong.refl minspots=50
 ```
 
-If needed, there are options for the minimum and maximum number of spots per image (for info, run `dials.python hitfinder.py --help`).
+The parameter `minspots` sets the minimum number of strong reflections per series that constitutes a 'hit'. The default value is 20. You can also specify a maximum using `maxspots`. 
 
 ## Indexing
 
@@ -72,10 +71,20 @@ Check that it indexed consistently.
 dials.show indexed.expt | grep "Unit cell"
 ```
 
-Finally, refine the geometry.
-
+Now, we can run the hit-finder again to reject any experiments that did not index (important for integration, later).
 ```
-dials.refine indexed.expt indexed.refl
+dials.python find_hits.py indexed.expt indexed.refl minspots=50
+```
+
+Next, we need to set a common beam / detector / goniometer model for all the datasets.
+```
+dials.python combine.py indexed.expt model=0
+```
+The `model` argument is which experiment to use as the reference geometry. The default value is 0, which should be fine in most cases.
+
+Finally, refine the geometry.
+```
+dials.refine combined.expt hits.refl
 ```
 
 ## Integration
@@ -85,7 +94,7 @@ Run dials.integrate as normal
 dials.integrate refined.refl refined.expt
 ```
 
-If this works, great! When I was testing this, it complained because there were too few spots per degree & spots overall, probably due to the narrow wedges. The defaults can be manually reset like this:
+If this works, great! If you get an error about too few spots, you might need to revisit hitfinding parameters, or change the default thresholds for integration, as follows:
 
 ```
 dials.integrate refined.refl refined.expt profile.gaussian_rs.min_spots.per_degree=10 profile.gaussian_rs.min_spots.overall=10
