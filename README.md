@@ -12,7 +12,7 @@ source /nfs/chess/sw/macchess/dials/dials-current/dials_env.sh
 
 ## Importing
 
-Serial crystallography data at id7b2 is collected using small oscillations per crystal, typically 1-5 degrees. The detector images from all of these sweeps are collected in a single h5 file (_master.h5) which includes metadata for the scan. However, we do not currently store the motor positions, so a conventional processing program would interpret this file as a single sweep of continuous rotation data. We provide the program `import_sliced.py` to replace the `dials.import` step you would normally perform.
+Serial crystallography data at id7b2 is collected using small oscillations per crystal, typically 1-5 degrees. The detector images from all of these sweeps are collected in a single h5 file (_master.h5) which includes metadata for the scan. However, we do not currently store the motor positions, so a conventional processing program would interpret this file as a single sweep of continuous rotation data. We created the program `import_sliced.py` (download from this repository) to replace the `dials.import` step you would normally perform.
 
 ```
 dials.python import_sliced.py <path-to-master.h5> invert_rotation_axis=True nimages=<number>
@@ -34,7 +34,7 @@ It's nice to get a plot of counts per image & resolution estimates, which helps 
 dials.spot_counts_per_image imported.expt strong.refl plot=counts_per_image.png
 ```
 
-Next, select out the 'hits'.  You'll need to download the python file `hitfinder.py` in this repository.
+Next, select out the 'hits'.  You'll need to download the python file `find_hits.py` in this repository.
 ```
 dials.python find_hits.py imported.expt strong.refl minspots=50
 ```
@@ -76,7 +76,7 @@ Now, we can run the hit-finder again to reject any experiments that did not inde
 dials.python find_hits.py indexed.expt indexed.refl minspots=50
 ```
 
-Next, we need to set a common beam / detector / goniometer model for all the datasets.
+Next, we need to set a common beam / detector / goniometer model for all the datasets. You'll need to download the python file `combine.py` in this repository.
 ```
 dials.python combine.py indexed.expt model=0
 ```
