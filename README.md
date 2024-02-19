@@ -54,8 +54,8 @@ The parameter `minspots` sets the minimum number of strong reflections per serie
 
 ### 3. Indexing
 
-[!TIP]
-We can do a first-pass indexing run in P1 to see what unit cells we get. Alternatively, if you know the cell and space group, you can skip ahead. 
+> [!TIP]
+> We can do a first-pass indexing run in P1 to see what unit cells we get. Alternatively, if you know the cell and space group, you can skip ahead. 
 
 ```
 dials.index hits.expt hits.refl detector.fix=distance joint=False nproc=32
@@ -96,8 +96,8 @@ dials.refine combined.expt hits2.refl scan_varying=False
 
 ### 4. Integration
 
-[!TIP]
-Before integration, it's a good idea to remove any crystals with abnormally high apparent mosaicity. These are probably indexing mistakes, and unlikely to improve data quality. Also, high mosaicity will force `dials.integrate` to use a lot of memory for shoeboxes, which can limit performance (for instance, by restricting the number of parallel processes).
+> [!TIP]
+> Before integration, it's a good idea to remove any crystals with abnormally high apparent mosaicity. These are probably indexing mistakes, and unlikely to improve data quality. Also, high mosaicity will force `dials.integrate` to use a lot of memory for shoeboxes, which can limit performance (for instance, by restricting the number of parallel processes).
 
 To calculate the mosaicity, first fit a profile model:
 ```
@@ -114,16 +114,17 @@ Run dials.integrate as normal
 dials.integrate hits3.{expt,refl}
 ```
 
-[!TIP]
-If this works, great! If you get an error about too few spots, you might need to revisit hitfinding parameters, or change the default thresholds for integration, as follows:
-```
-dials.integrate refined.refl hits3.{expt,refl} profile.gaussian_rs.min_spots.per_degree=10 profile.gaussian_rs.min_spots.overall=10
-```
+> [!TIP]
+> If this works, great! If you get an error about too few spots, you might need to revisit hitfinding parameters, or change the default thresholds for integration, as follows:
+> 
+> ```
+> dials.integrate refined.refl hits3.{expt,refl} profile.gaussian_rs.min_spots.per_degree=10 profile.gaussian_rs.min_spots.overall=10
+> ```
 
 ### 5. Symmetry determination, resolution cutoff, scaling, & merging
 
-[!TIP]
-These steps are most easily done using `xia2.multiplex`. However, I have found that multiplex often did not get the correct space group for SSX data, and I had to go back to indexing with the correct space group enforced. I'm not sure why this was necessary, but it was. You can also override the space group determination in xia2.multiplex.
+> [!TIP]
+> These steps are most easily done using `xia2.multiplex`. However, I have found that multiplex often did not get the correct space group for SSX data, and I had to go back to indexing with the correct space group enforced. I'm not sure why this was necessary, but it was. You can also override the space group determination in xia2.multiplex.
 
 A basic run looks like this:
 ```
@@ -144,8 +145,8 @@ where `<sg>` shoudl be replaced by the known space group, such as `space_group=P
 
 After running multiplex, carefully inspect the html reports, especially completeness and resolution determination. If all is well, use the mtz files in the multiplex folder to solve the structure.
 
-[!TIP]
-It may be necessary to go back to earlier steps in data processing (for instance, imposing space group during indexing). To avoid cluttering your directory, I recommend making new directories every time you change something. 
+> [!TIP]
+> It may be necessary to go back to earlier steps in data processing (for instance, imposing space group during indexing). To avoid cluttering your directory, I recommend making new directories every time you change something. 
 
 ## Installation notes
 
