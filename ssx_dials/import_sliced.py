@@ -3,7 +3,7 @@ Import single sweep image stack and slice into multiple experiments with the sam
 
 Examples::
 
-  dials.python import_sliced.py <path-to-master.h5> invert_rotation_axis=True nimages=5
+  ssx.import <path-to-master.h5> invert_rotation_axis=True nimages=5
 """
 
 import logging
@@ -22,7 +22,7 @@ from dials.command_line.dials_import import (
 )
 from dials.util.version import dials_version
 
-logger = logging.getLogger('dials.command_line.find_hits')
+logger = logging.getLogger('dials.command_line.import')
 
 help_message = __doc__
 
@@ -35,7 +35,7 @@ phil_scope = iotbx.phil.parse(
   include scope dials.command_line.dials_import.phil_scope
   
   output {
-      log = 'import_sliced.log'
+      log = 'ssx.import.log'
             .type = str
             .help = "Name of log file"
   }
@@ -46,7 +46,7 @@ phil_scope = iotbx.phil.parse(
 @show_mail_handle_errors()
 def run(args=None):
 
-    usage = 'dials.python import_sliced.py [options] <path-to-master.h5> nimages=5'
+    usage = 'ssx.import [options] <path-to-master.h5> nimages=5'
     parser = ArgumentParser(
         usage=usage,
         phil=phil_scope,

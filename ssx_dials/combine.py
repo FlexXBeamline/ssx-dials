@@ -3,7 +3,7 @@ Combine experiments with a common detector / beam / goniometer model
 
 Examples::
 
-  dials.python combine.py indexed.expt model=0
+  ssx.combine indexed.expt model=0
 """
 
 import logging
@@ -29,7 +29,7 @@ phil_scope = iotbx.phil.parse(
       experiments = 'combined.expt'
           .type = str
           .help = "Output experiments filename"
-      log = 'combine.log'
+      log = 'ssx.combine.log'
           .type = str
           .help = "Name of log file"
   }
@@ -40,7 +40,7 @@ phil_scope = iotbx.phil.parse(
 @show_mail_handle_errors()
 def run(args=None):
 
-    usage = 'dials.python combine.py [options] experiments.expt'
+    usage = 'ssx.combine [options] experiments.expt'
     parser = ArgumentParser(
         usage=usage,
         phil=phil_scope,

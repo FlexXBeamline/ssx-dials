@@ -34,7 +34,7 @@ phil_scope = iotbx.phil.parse(
      reflections = 'filtered.refl'
         .type = str
         .help = "The filtered reflections output filename"
-     log = 'filter_dose.log'
+     log = 'ssx.filter_dose.log'
         .type = str
         .help = "Name of log file"
   }
@@ -44,7 +44,7 @@ phil_scope = iotbx.phil.parse(
 
 def run(args=None):
     
-    usage = 'dials.python filter_dose.py integrated.expt integrated.refl [options]'
+    usage = 'ssx.filter_dose integrated.expt integrated.refl [options]'
     parser = ArgumentParser(
         usage=usage,
         phil=phil_scope,

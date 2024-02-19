@@ -5,9 +5,9 @@ Remove sweeps based on number of reflections less than or exceeding a cutoff. If
 
 Examples::
 
-  dials.python find_hits.py imported.expt strong.refl minspots=20 maxspots=500
+  ssx.find_hits imported.expt strong.refl minspots=20 maxspots=500
   
-  dials.python find_hits.py indexed.expt indexed.refl minspots=20 output.experiments=indexed_filtered.expt output.reflections=indexed_filtered.refl
+  ssx.find_hits indexed.expt indexed.refl minspots=20 output.experiments=indexed_filtered.expt output.reflections=indexed_filtered.refl
 """
 
 # This is based on a script that Graeme Winter posted on dials-slack on October 31, 2023
@@ -45,7 +45,7 @@ phil_scope = iotbx.phil.parse(
      reflections = 'hits.refl'
         .type = str
         .help = "The filtered reflections output filename"
-     log = 'find_hits.log'
+     log = 'ssx.find_hits.log'
         .type = str
         .help = "Name of log file"
     }
@@ -58,7 +58,7 @@ logger = logging.getLogger('dials.command_line.index.find_hits')
 #@show_mail_handle_errors()
 def run(args=None):
     
-    usage = 'dials.python find_hits.py imported.expt strong.refl [options]'
+    usage = 'ssx.find_hits imported.expt strong.refl [options]'
     parser = ArgumentParser(
         usage=usage,
         phil=phil_scope,
