@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='ssx-dials',
     packages=["ssx_dials"],
-    version='0.0.1',
+    version='0.0.2',
     description='DIALS command-line tools for serial oscillation crystallography data',
     author='Steve P. Meisburger',
     author_email='spm82@cornell.edu',
