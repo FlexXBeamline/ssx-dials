@@ -106,7 +106,7 @@ dials.create_profile_model refined.{expt,refl}
 A summary table will be printed with apparent mosaicity for each experiment (`sigma_m`). Typically, this will be comparable to / less than the oscillation width per frame. If there are outliers with large mosaicity (e.g. > 0.25 degrees), they can be removed as follows:
 
 ```
-ssx.find_hits models_with_experiments.expt refined.refl mosaicity_cutoff=0.25 output.experiments=hits3.expt output.reflections=hits3.refl
+ssx.find_hits models_with_profiles.expt refined.refl mosaicity_cutoff=0.25 output.experiments=hits3.expt output.reflections=hits3.refl
 ```
 
 Run dials.integrate as normal
