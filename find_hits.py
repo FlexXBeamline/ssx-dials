@@ -34,6 +34,10 @@ phil_scope = iotbx.phil.parse(
     .type = int
     .help = "Maximum number of spots per sweep"
     
+  mosaicity_cutoff = 1
+    .type = float(value_min=0)
+    .help = "Maximum sigma_m in degrees (mosaicity), if fitted profile model is available"
+    
   output {
      experiments = 'hits.expt'
         .type = str
@@ -94,12 +98,19 @@ def run(args=None):
     keep_refl = flex.reflection_table()
 
     for j, e in enumerate(expt):
-        nn = (ids == j).count(True)
-        if (nn > params.minspots) and (nn < params.maxspots):
-            keep = refl.select(ids == j)
-            keep["id"] = flex.int(keep.size(), len(keep_expt))
-            keep_refl.extend(keep)
-            keep_expt.append(e)
+        if e.profile is not None and e.profile.sigma_m() > params.mosaicity_cutoff:
+            logger.info(f'Experiment {j} rejected: mosaicity {e.profile.sigma_m()} above cutoff')
+        else:
+            nn = (ids == j).count(True)
+            if (nn < params.minspots):
+                logger.info(f'Experiment {j} rejected: {nn} is fewer than the minimum number of spots')
+            elif (nn > params.maxspots):
+                logger.info(f'Experiment {j} rejected: {nn} exceeds the maximum number of spots')
+            else:
+                keep = refl.select(ids == j)
+                keep["id"] = flex.int(keep.size(), len(keep_expt))
+                keep_refl.extend(keep)
+                keep_expt.append(e)
 
     logger.info('-'*80)
     logger.info(f'Found {len(keep_expt)} hits ({len(keep_expt)}/{len(expt)} = {(len(keep_expt)/len(expt)):.1%})')
